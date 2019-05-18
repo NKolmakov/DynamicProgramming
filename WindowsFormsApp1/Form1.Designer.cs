@@ -28,35 +28,43 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.dgUserData = new System.Windows.Forms.DataGridView();
+            this.ColumnX = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.numericOrganizations = new System.Windows.Forms.NumericUpDown();
             this.numericYears = new System.Windows.Forms.NumericUpDown();
             this.numericColumns = new System.Windows.Forms.NumericUpDown();
-            this.ColumnX = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            this.btnStart = new System.Windows.Forms.Button();
+            ((System.ComponentModel.ISupportInitialize)(this.dgUserData)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericOrganizations)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericYears)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericColumns)).BeginInit();
             this.SuspendLayout();
             // 
-            // dataGridView1
+            // dgUserData
             // 
-            this.dataGridView1.AllowUserToAddRows = false;
-            this.dataGridView1.AllowUserToDeleteRows = false;
-            this.dataGridView1.AllowUserToResizeColumns = false;
-            this.dataGridView1.AllowUserToResizeRows = false;
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.ColumnHeadersVisible = false;
-            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dgUserData.AllowUserToAddRows = false;
+            this.dgUserData.AllowUserToDeleteRows = false;
+            this.dgUserData.AllowUserToResizeColumns = false;
+            this.dgUserData.AllowUserToResizeRows = false;
+            this.dgUserData.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgUserData.ColumnHeadersVisible = false;
+            this.dgUserData.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ColumnX});
-            this.dataGridView1.Location = new System.Drawing.Point(12, 199);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.RowHeadersVisible = false;
-            this.dataGridView1.Size = new System.Drawing.Size(300, 66);
-            this.dataGridView1.TabIndex = 0;
+            this.dgUserData.Location = new System.Drawing.Point(12, 199);
+            this.dgUserData.Name = "dgUserData";
+            this.dgUserData.RowHeadersVisible = false;
+            this.dgUserData.Size = new System.Drawing.Size(300, 66);
+            this.dgUserData.TabIndex = 0;
+            // 
+            // ColumnX
+            // 
+            this.ColumnX.HeaderText = "Xi";
+            this.ColumnX.Name = "ColumnX";
+            this.ColumnX.ReadOnly = true;
+            this.ColumnX.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             // 
             // label1
             // 
@@ -146,28 +154,31 @@
             0,
             0});
             // 
-            // ColumnX
+            // btnStart
             // 
-            this.ColumnX.HeaderText = "Xi";
-            this.ColumnX.Name = "ColumnX";
-            this.ColumnX.ReadOnly = true;
-            this.ColumnX.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.btnStart.Location = new System.Drawing.Point(83, 361);
+            this.btnStart.Name = "btnStart";
+            this.btnStart.Size = new System.Drawing.Size(167, 39);
+            this.btnStart.TabIndex = 7;
+            this.btnStart.Text = "Начать";
+            this.btnStart.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.btnStart);
             this.Controls.Add(this.numericColumns);
             this.Controls.Add(this.numericYears);
             this.Controls.Add(this.numericOrganizations);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.dataGridView1);
+            this.Controls.Add(this.dgUserData);
             this.Name = "Form1";
             this.Text = "Form1";
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgUserData)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericOrganizations)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericYears)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericColumns)).EndInit();
@@ -178,7 +189,7 @@
 
         #endregion
 
-        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridView dgUserData;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
@@ -186,6 +197,7 @@
         private System.Windows.Forms.NumericUpDown numericYears;
         private System.Windows.Forms.NumericUpDown numericColumns;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnX;
+        private System.Windows.Forms.Button btnStart;
     }
 }
 

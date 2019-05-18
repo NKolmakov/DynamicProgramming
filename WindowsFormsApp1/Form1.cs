@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace WindowsFormsApp1
@@ -17,15 +10,233 @@ namespace WindowsFormsApp1
         private int previousColumnsAmount;
 
         public Form1()
-        {            
+        {
             InitializeComponent();
             InitializeForm();
             numericOrganizations.ValueChanged += NumericOrganizations_ValueChanged;
-            this.dataGridView1.RowsAdded += new DataGridViewRowsAddedEventHandler(this.DataGridView1_RowsAdded);
-            this.dataGridView1.RowsRemoved += new DataGridViewRowsRemovedEventHandler(DataGridView1_RowsRemoved);
-            this.dataGridView1.ColumnAdded += DataGridView1_ColumnAdded;
-            this.dataGridView1.ColumnRemoved += DataGridView1_ColumnRemoved;
+            dgUserData.RowsAdded += new DataGridViewRowsAddedEventHandler(DataGridView1_RowsAdded);
+            dgUserData.RowsRemoved += new DataGridViewRowsRemovedEventHandler(DataGridView1_RowsRemoved);
+            dgUserData.ColumnAdded += DataGridView1_ColumnAdded;
+            dgUserData.ColumnRemoved += DataGridView1_ColumnRemoved;
             numericColumns.ValueChanged += NumericColumns_ValueChanged;
+            btnStart.Click += BtnStart_Click;
+        }
+
+        private void BtnStart_Click(object sender, EventArgs e)
+        {
+            double[,] matrix = new double[dgUserData.RowCount, dgUserData.ColumnCount - 1];
+            if (ValidateData())
+            {
+                FillMatrix(matrix);
+                StartCount(matrix);
+            }
+            else
+            {
+                MessageBox.Show("Ошибка! Заданные значения не соответствуют заданным требованиям:" +
+                    "\n\n* Ячейки должны содержать числа;" +
+                    "\n\n* Дробная часть десятичных чисел должна быть разделена точкой", "Ошибка",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+
+        }
+
+        private void StartCount(double[,] filledMatrix)
+        {
+            //матрица для хранения вычислений суммирования коэф-тов прибыли двух предприятий
+            double[,] matrix = new double[filledMatrix.GetLength(0) - 1, filledMatrix.GetLength(1)];
+
+            //массив для хранения максимальных элементов диагонали
+            //состоит из двумерных матриц, каждая из которых имеет следующее содержание
+            //
+            //------------------ 1-я строка----------------------------
+            //
+            //зарезервирована для хранения найденных максимальных элементов каждой диагонали
+            //номер столбца соответствует номеру каждой диагонали матрицы, полученной в результате суммирования
+            //коэффициентов прибыли двух предприятий
+            //
+            //----------------- 2-я строка ------------------------------
+            //
+            //зарезервирована для хранения выделяемой суммы, соответствующей максимальному коэффициенту
+            double[][,] result = new double[filledMatrix.GetLength(0) - 2][,];
+
+            //общий цикл с количеством проходов, равных количеству предприятий -1
+            for (int i = 0; i < filledMatrix.GetLength(0) - 2; i++)
+            {
+                if (i == 0)
+                {
+                    double[] first = new double[filledMatrix.GetLength(1)];
+                    double[] second = new double[filledMatrix.GetLength(1)];
+
+                    for (int j = 0; j < 1; j++)
+                    {
+                        for (int k = 0; k < filledMatrix.GetLength(1); k++)
+                        {
+                            first[k] = filledMatrix[1, k];
+                            second[k] = filledMatrix[2, k];
+                        }
+                    }
+
+                    matrix = Summ(first, second);
+                    result[i] = GetResult(matrix, filledMatrix);
+                }
+                else
+                {
+                    double[] first = new double[filledMatrix.GetLength(1)];
+                    double[] second = new double[filledMatrix.GetLength(1)];
+
+                    for (int j = 0; j < 1; j++)
+                    {
+                        for (int k = 0; k < result[i - 1].GetLength(1); k++)
+                        {
+                            first[k] = result[i - 1][0, k];
+                            second[k] = filledMatrix[i + 2, k];
+                        }
+                    }
+
+                    matrix = Summ(first, second);
+                    result[i] = new double[2, filledMatrix.GetLength(1)];
+                    result[i] = GetResult(matrix, filledMatrix);
+                }
+                //запись в массив значений найденные максимальные коэф-ты прироста прибыли 
+                //и соответствующие им выделяемые суммы
+
+                // result[i] = new double[2, filledMatrix.GetLength(1)];
+                //for (int j = 0; j < filledMatrix.GetLength(1); j++)
+                //{
+                //    double max = 0;
+                //    double sum = 0;
+
+                //    int counterRow = j;
+                //    int counterCol = 0;
+
+                //    for (int l = 0; l <= j; l++)
+                //    {
+                //        if (max < matrix[counterRow, counterCol])
+                //        {
+                //            max = matrix[counterRow, counterCol];
+                //            sum = filledMatrix[0, counterCol];
+                //        }
+                //        counterRow--;
+                //        counterCol++;
+                //    }
+
+                //    result[i][0, j] = max;
+                //    result[i][1, j] = sum;
+
+                //}
+            }
+        }
+
+        private double[,] GetResult(double[,] matrix, double[,] filledMatrix)
+        {
+            double[,] result = new double[2, filledMatrix.GetLength(1)];
+
+            for (int j = 0; j < filledMatrix.GetLength(1); j++)
+            {
+                double max = 0;
+                double sum = 0;
+
+                int counterRow = j;
+                int counterCol = 0;
+
+                for (int l = 0; l <= j; l++)
+                {
+                    if (max < matrix[counterRow, counterCol])
+                    {
+                        max = matrix[counterRow, counterCol];
+                        sum = filledMatrix[0, counterCol];
+                    }
+                    counterRow--;
+                    counterCol++;
+                }
+
+                result[0, j] = max;
+                result[1, j] = sum;
+
+            }
+
+            return result;
+
+        }
+
+        private double[,] Summ(double[] firstOrganiz, double[] secondOrganiz)
+        {
+            double[,] matrix = new double[firstOrganiz.Length, secondOrganiz.Length];
+
+            //переменная, декрементируемая после каждой итерации для получения треугольного вида матрицы
+            //изначально принимает значение, равное количеству столбцов
+            int temp = matrix.GetLength(1);
+
+            //суммирование коэф-тов первого и второго предприятия
+            for (int j = 0; j < matrix.GetLength(1); j++)
+            {
+                for (int k = 0; k < temp; k++)
+                {
+                    ////первое предприятие. Индекс i+1 т.к на первой строке расположены выделяемые суммы
+                    //double firstVar = matrix[i + 1, k];
+
+                    ////второе предприятие
+                    //double secondVar = matrix[i + 2, j];
+
+                    double firstVar = firstOrganiz[k];
+                    double secondVar = secondOrganiz[j];
+
+                    matrix[j, k] = firstVar + secondVar;
+                }
+                temp--;
+            }
+
+            return matrix;
+
+        }
+
+        /// <summary>
+        /// Метод возвращает матрицу, заполненную пользователем
+        /// Данные берутся из элемента управления DataGridView и представляются как массив
+        /// Расположение элементов:
+        /// --------------------- 1-я строка-------------------------------
+        /// Располагаются выделяемые предприятиям суммы
+        /// --------------------- Оставшиеся строки -----------------------
+        /// Располагаются коэффициенты прироста мощности
+        /// </summary>
+        /// <param name="matrix"></param>
+        private void FillMatrix(double[,] matrix)
+        {
+            for (int i = 0; i < dgUserData.RowCount; i++)
+            {
+                for (int j = 0; j < dgUserData.ColumnCount - 1; j++)
+                {
+                    matrix[i, j] = Convert.ToDouble(dgUserData.Rows[i].Cells[j + 1].Value);
+                }
+            }
+        }
+
+        private bool ValidateData()
+        {
+            try
+            {
+                for (int i = 0; i < dgUserData.RowCount; i++)
+                {
+                    for (int j = 1; j < dgUserData.ColumnCount; j++)
+                    {
+                        if (dgUserData.Rows[i].Cells[j].Value.ToString() == "")
+                        {
+                            dgUserData.Rows[i].Cells[j].Value = 0;
+                        }
+                        else
+                        {
+                            Convert.ToDouble(dgUserData.Rows[i].Cells[j].Value);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+            return true;
         }
 
         private void NumericColumns_ValueChanged(object sender, EventArgs e)
@@ -33,13 +244,13 @@ namespace WindowsFormsApp1
             int currentColumnsAmount = Convert.ToInt32(numericColumns.Value);
             if (previousColumnsAmount < currentColumnsAmount)
             {
-                dataGridView1.Columns.Add("Column" + currentColumnsAmount, "");
-                previousColumnsAmount++;               
+                dgUserData.Columns.Add("Column" + currentColumnsAmount, "");
+                previousColumnsAmount++;
             }
             else
             {
                 previousColumnsAmount--;
-                dataGridView1.Columns.RemoveAt(previousColumnsAmount);                               
+                dgUserData.Columns.RemoveAt(previousColumnsAmount);
             }
         }
 
@@ -65,59 +276,62 @@ namespace WindowsFormsApp1
 
         private void ChangeHeight()
         {
-            dataGridView1.Height = dataGridView1.Rows.GetRowsHeight(DataGridViewElementStates.Visible);
+            dgUserData.Height = dgUserData.Rows.GetRowsHeight(DataGridViewElementStates.Visible);
         }
 
         private void ChangeWidth()
         {
-            dataGridView1.Width = dataGridView1.Columns.GetColumnsWidth(DataGridViewElementStates.Visible)+20;
+            dgUserData.Width = dgUserData.Columns.GetColumnsWidth(DataGridViewElementStates.Visible) + 20;
         }
 
         /// <summary>
-        /// Method to add one row if user increase organizations amount, and remove one row
-        /// if user decrease organizations amount
+        /// Метод для изменения размеров отображаемой таблицы в зависимости от операции со строками
+        /// При добавлении строки таблица изменит размер на высоту одной строки
+        /// При удалении строки таблица уменьшится на размер одной строки
         /// </summary>        
         private void NumericOrganizations_ValueChanged(object sender, EventArgs e)
         {
-            int currentOrganizationsAmount = Convert.ToInt32(numericOrganizations.Value);            
+            int currentOrganizationsAmount = Convert.ToInt32(numericOrganizations.Value);
             if (previousOrganizationsAmount < currentOrganizationsAmount)
-            {           
-                dataGridView1.Rows.Add();                
+            {
+                dgUserData.Rows.Add();
                 int i = previousOrganizationsAmount++;
-                dataGridView1.Rows[i+1].Cells[0].Value = "f" + (i + 1) + "(X" + (i + 1) + ")";
+                dgUserData.Rows[i + 1].Cells[0].Value = "f" + (i + 1) + "(X" + (i + 1) + ")";
             }
             else
             {
-                dataGridView1.Rows.Remove(dataGridView1.Rows[dataGridView1.Rows.Count-1] );
-               int i = --previousOrganizationsAmount-1;
-                dataGridView1.Rows[i+1].Cells[0].Value = "f" + (i + 1) + "(X" + (i + 1) + ")";
+                dgUserData.Rows.Remove(dgUserData.Rows[dgUserData.Rows.Count - 1]);
+                int i = --previousOrganizationsAmount - 1;
+                dgUserData.Rows[i + 1].Cells[0].Value = "f" + (i + 1) + "(X" + (i + 1) + ")";
             }
-        }        
+        }
 
         private void InitializeForm()
-        {   
-            //initialize default values
+        {
+            //инициализация количества строк по умолчанию
             previousOrganizationsAmount = Convert.ToInt32(numericOrganizations.Value);
             previousYearsAmount = Convert.ToInt32(numericYears.Value);
             previousColumnsAmount = Convert.ToInt32(numericColumns.Value);
 
-            //first row reserved to heads of the table
-            dataGridView1.Rows.Add();
-            dataGridView1.Rows[0].Cells[0].Value = "Xi";
+            //первый столбец первой строки зарезервирован под описание столбца
+            //запрещен для редактирования
+            dgUserData.Rows.Add();
+            dgUserData.Rows[0].Cells[0].Value = "Xi";
 
-            //number of rows depends on default organizations amount
+            //количество строк зависит от количество организаций
             for (int i = 0; i < numericOrganizations.Value; i++)
             {
-                dataGridView1.Rows.Add();
-                dataGridView1.Rows[i+1].Cells[0].Value = "f"+(i+1)+"(X"+(i+1)+")";
+                dgUserData.Rows.Add();
+                dgUserData.Rows[i + 1].Cells[0].Value = "f" + (i + 1) + "(X" + (i + 1) + ")";
             }
 
-            //number of columns depends on default columns amount
+            //количество столбцов зависит от выделяемой суммы
             for (int i = 0; i < numericColumns.Value; i++)
             {
-                dataGridView1.Columns.Add("Column"+(i+1),"0");
-            }           
+                dgUserData.Columns.Add("Column" + (i + 1), "0");
+            }
         }
-       
     }
 }
+
+
