@@ -37,6 +37,7 @@
             this.numericYears = new System.Windows.Forms.NumericUpDown();
             this.numericColumns = new System.Windows.Forms.NumericUpDown();
             this.btnStart = new System.Windows.Forms.Button();
+            this.label4 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dgUserData)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericOrganizations)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericYears)).BeginInit();
@@ -53,10 +54,10 @@
             this.dgUserData.ColumnHeadersVisible = false;
             this.dgUserData.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.ColumnX});
-            this.dgUserData.Location = new System.Drawing.Point(12, 199);
+            this.dgUserData.Location = new System.Drawing.Point(27, 210);
             this.dgUserData.Name = "dgUserData";
             this.dgUserData.RowHeadersVisible = false;
-            this.dgUserData.Size = new System.Drawing.Size(300, 66);
+            this.dgUserData.Size = new System.Drawing.Size(296, 80);
             this.dgUserData.TabIndex = 0;
             // 
             // ColumnX
@@ -156,18 +157,27 @@
             // 
             // btnStart
             // 
-            this.btnStart.Location = new System.Drawing.Point(83, 361);
+            this.btnStart.Location = new System.Drawing.Point(27, 155);
             this.btnStart.Name = "btnStart";
             this.btnStart.Size = new System.Drawing.Size(167, 39);
             this.btnStart.TabIndex = 7;
             this.btnStart.Text = "Начать";
             this.btnStart.UseVisualStyleBackColor = true;
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(599, 31);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(0, 13);
+            this.label4.TabIndex = 8;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(1095, 512);
+            this.Controls.Add(this.label4);
             this.Controls.Add(this.btnStart);
             this.Controls.Add(this.numericColumns);
             this.Controls.Add(this.numericYears);
@@ -198,6 +208,7 @@
         private System.Windows.Forms.NumericUpDown numericColumns;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColumnX;
         private System.Windows.Forms.Button btnStart;
+        private System.Windows.Forms.Label label4;
     }
 }
 

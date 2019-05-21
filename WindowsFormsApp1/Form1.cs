@@ -7,7 +7,7 @@ namespace WindowsFormsApp1
     {
         private int previousOrganizationsAmount;
         private int previousYearsAmount;
-        private int previousColumnsAmount;
+        private int previousColumnsAmount;        
 
         public Form1()
         {
@@ -63,6 +63,7 @@ namespace WindowsFormsApp1
             //общий цикл с количеством проходов, равных количеству предприятий -1
             for (int i = 0; i < filledMatrix.GetLength(0) - 2; i++)
             {
+                //если это первый проход берутся коэффициенты из начальной таблицы предприятий
                 if (i == 0)
                 {
                     double[] first = new double[filledMatrix.GetLength(1)];
@@ -82,6 +83,8 @@ namespace WindowsFormsApp1
                 }
                 else
                 {
+                    //если не первый проход брать коэффициенты для суммирования из таблицы с результатом
+                    //и таблицы с предприятиями
                     double[] first = new double[filledMatrix.GetLength(1)];
                     double[] second = new double[filledMatrix.GetLength(1)];
 
@@ -98,34 +101,66 @@ namespace WindowsFormsApp1
                     result[i] = new double[2, filledMatrix.GetLength(1)];
                     result[i] = GetResult(matrix, filledMatrix);
                 }
-                //запись в массив значений найденные максимальные коэф-ты прироста прибыли 
-                //и соответствующие им выделяемые суммы
-
-                // result[i] = new double[2, filledMatrix.GetLength(1)];
-                //for (int j = 0; j < filledMatrix.GetLength(1); j++)
-                //{
-                //    double max = 0;
-                //    double sum = 0;
-
-                //    int counterRow = j;
-                //    int counterCol = 0;
-
-                //    for (int l = 0; l <= j; l++)
-                //    {
-                //        if (max < matrix[counterRow, counterCol])
-                //        {
-                //            max = matrix[counterRow, counterCol];
-                //            sum = filledMatrix[0, counterCol];
-                //        }
-                //        counterRow--;
-                //        counterCol++;
-                //    }
-
-                //    result[i][0, j] = max;
-                //    result[i][1, j] = sum;
-
-                //}
             }
+
+            Analyze(result,filledMatrix);
+        }
+
+        private void Analyze(double[][,] result, double[,] filledMatrix)
+        {
+            double[] summs = new double[result.GetLength(0)+1];
+            double commonSumm = filledMatrix[0, filledMatrix.GetLength(1) - 1];
+            double currentSumm = 0;
+            double profit = 0;
+            double temp = 0;
+            int years = Convert.ToInt32(numericYears.Value);
+
+            for (int i = result.GetLength(0) - 1; i >= 0; i--)
+            {
+                double max = result[0][0, 0];
+                for (int j = 0; j < result[i].GetLength(0); j++)
+                {
+                    for (int k = 0; k < result[i].GetLength(1); k++)
+                    {
+                        if (max < result[i][0, k])
+                        {
+                            if (i == result.GetLength(0) - 1)
+                            {
+                                max = result[i][0, k];
+                                profit = max*years;
+                                currentSumm = result[i][1, k];
+                                commonSumm = filledMatrix[0, filledMatrix.GetLength(1) - 1];
+                                summs[i+1] = currentSumm;
+                                commonSumm -= summs[i+1];
+                            }
+                            else
+                            {
+                                if (filledMatrix[0, k] == commonSumm)
+                                {
+                                    summs[i+1] = result[i][1, k];
+                                    commonSumm -= result[i][1, k];
+                                    k = result[i].GetLength(1);
+                                    j = result[i].GetLength(0);
+                                }
+                            }
+
+                        }
+                    }
+                }
+                
+            }
+            summs[0] = commonSumm;
+
+            for (int i = 0; i < summs.Length; i++)
+            {
+                summs[i] *= years; 
+            }
+
+            previousYearsAmount = Convert.ToInt32(numericYears.Value);
+            ShowReport showReport = new ShowReport(summs,previousYearsAmount,profit);
+            showReport.Owner = this;
+            showReport.Show();
+            this.Hide();
         }
 
         private double[,] GetResult(double[,] matrix, double[,] filledMatrix)
@@ -145,7 +180,8 @@ namespace WindowsFormsApp1
                     if (max < matrix[counterRow, counterCol])
                     {
                         max = matrix[counterRow, counterCol];
-                        sum = filledMatrix[0, counterCol];
+                       // sum = filledMatrix[0, counterCol];
+                        sum = filledMatrix[0, counterRow];
                     }
                     counterRow--;
                     counterCol++;
