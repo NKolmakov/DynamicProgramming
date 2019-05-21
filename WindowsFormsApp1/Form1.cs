@@ -11,8 +11,7 @@ namespace WindowsFormsApp1
 
         public Form1()
         {
-            InitializeComponent();
-            InitializeForm();
+            InitializeComponent();            
             numericOrganizations.ValueChanged += NumericOrganizations_ValueChanged;
             dgUserData.RowsAdded += new DataGridViewRowsAddedEventHandler(DataGridView1_RowsAdded);
             dgUserData.RowsRemoved += new DataGridViewRowsRemovedEventHandler(DataGridView1_RowsRemoved);
@@ -20,6 +19,7 @@ namespace WindowsFormsApp1
             dgUserData.ColumnRemoved += DataGridView1_ColumnRemoved;
             numericColumns.ValueChanged += NumericColumns_ValueChanged;
             btnStart.Click += BtnStart_Click;
+            InitializeForm();
         }
 
         private void BtnStart_Click(object sender, EventArgs e)
@@ -281,6 +281,7 @@ namespace WindowsFormsApp1
             if (previousColumnsAmount < currentColumnsAmount)
             {
                 dgUserData.Columns.Add("Column" + currentColumnsAmount, "");
+                dgUserData.Columns[dgUserData.ColumnCount - 1].Width = 60;
                 previousColumnsAmount++;
             }
             else
@@ -292,12 +293,12 @@ namespace WindowsFormsApp1
 
         private void DataGridView1_ColumnRemoved(object sender, DataGridViewColumnEventArgs e)
         {
-            ChangeWidth();
+            dgUserData.Width = dgUserData.Columns.GetColumnsWidth(DataGridViewElementStates.Visible)+20;
         }
 
         private void DataGridView1_ColumnAdded(object sender, DataGridViewColumnEventArgs e)
         {
-            ChangeWidth();
+            dgUserData.Width = dgUserData.Columns.GetColumnsWidth(DataGridViewElementStates.Visible)-20;
         }
 
         private void DataGridView1_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
@@ -313,12 +314,7 @@ namespace WindowsFormsApp1
         private void ChangeHeight()
         {
             dgUserData.Height = dgUserData.Rows.GetRowsHeight(DataGridViewElementStates.Visible);
-        }
-
-        private void ChangeWidth()
-        {
-            dgUserData.Width = dgUserData.Columns.GetColumnsWidth(DataGridViewElementStates.Visible) + 20;
-        }
+        }        
 
         /// <summary>
         /// Метод для изменения размеров отображаемой таблицы в зависимости от операции со строками
@@ -364,8 +360,23 @@ namespace WindowsFormsApp1
             //количество столбцов зависит от выделяемой суммы
             for (int i = 0; i < numericColumns.Value; i++)
             {
-                dgUserData.Columns.Add("Column" + (i + 1), "0");
+                dgUserData.Columns.Add("Column" + (i + 1), "0");                
             }
+
+            //задание размера каждому столбцу
+            for (int i = 0; i < dgUserData.ColumnCount; i++)
+            {
+                dgUserData.Columns[i].Width = 60;
+            }
+
+            dgUserData.Width = dgUserData.Columns.GetColumnsWidth(DataGridViewElementStates.Visible)+20;
+            dgUserData.Height = dgUserData.Rows.GetRowsHeight(DataGridViewElementStates.Visible);
+
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

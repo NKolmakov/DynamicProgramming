@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.dgUserData = new System.Windows.Forms.DataGridView();
-            this.ColumnX = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -38,6 +37,7 @@
             this.numericColumns = new System.Windows.Forms.NumericUpDown();
             this.btnStart = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
+            this.ColumnX = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dgUserData)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericOrganizations)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericYears)).BeginInit();
@@ -57,20 +57,13 @@
             this.dgUserData.Location = new System.Drawing.Point(27, 210);
             this.dgUserData.Name = "dgUserData";
             this.dgUserData.RowHeadersVisible = false;
-            this.dgUserData.Size = new System.Drawing.Size(296, 80);
+            this.dgUserData.Size = new System.Drawing.Size(180, 90);
             this.dgUserData.TabIndex = 0;
-            // 
-            // ColumnX
-            // 
-            this.ColumnX.HeaderText = "Xi";
-            this.ColumnX.Name = "ColumnX";
-            this.ColumnX.ReadOnly = true;
-            this.ColumnX.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(24, 27);
+            this.label1.Location = new System.Drawing.Point(234, 15);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(134, 13);
             this.label1.TabIndex = 1;
@@ -79,7 +72,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(24, 56);
+            this.label2.Location = new System.Drawing.Point(234, 44);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(119, 13);
             this.label2.TabIndex = 2;
@@ -88,7 +81,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(24, 123);
+            this.label3.Location = new System.Drawing.Point(234, 111);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(226, 13);
             this.label3.TabIndex = 3;
@@ -96,7 +89,7 @@
             // 
             // numericOrganizations
             // 
-            this.numericOrganizations.Location = new System.Drawing.Point(211, 27);
+            this.numericOrganizations.Location = new System.Drawing.Point(421, 15);
             this.numericOrganizations.Maximum = new decimal(new int[] {
             10,
             0,
@@ -118,7 +111,7 @@
             // 
             // numericYears
             // 
-            this.numericYears.Location = new System.Drawing.Point(211, 56);
+            this.numericYears.Location = new System.Drawing.Point(421, 44);
             this.numericYears.Minimum = new decimal(new int[] {
             1,
             0,
@@ -135,7 +128,7 @@
             // 
             // numericColumns
             // 
-            this.numericColumns.Location = new System.Drawing.Point(256, 121);
+            this.numericColumns.Location = new System.Drawing.Point(466, 109);
             this.numericColumns.Maximum = new decimal(new int[] {
             10,
             0,
@@ -157,7 +150,7 @@
             // 
             // btnStart
             // 
-            this.btnStart.Location = new System.Drawing.Point(27, 155);
+            this.btnStart.Location = new System.Drawing.Point(237, 143);
             this.btnStart.Name = "btnStart";
             this.btnStart.Size = new System.Drawing.Size(167, 39);
             this.btnStart.TabIndex = 7;
@@ -172,11 +165,19 @@
             this.label4.Size = new System.Drawing.Size(0, 13);
             this.label4.TabIndex = 8;
             // 
+            // ColumnX
+            // 
+            this.ColumnX.HeaderText = "Xi";
+            this.ColumnX.Name = "ColumnX";
+            this.ColumnX.ReadOnly = true;
+            this.ColumnX.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.ColumnX.Width = 60;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1095, 512);
+            this.ClientSize = new System.Drawing.Size(741, 500);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.btnStart);
             this.Controls.Add(this.numericColumns);
@@ -188,6 +189,7 @@
             this.Controls.Add(this.dgUserData);
             this.Name = "Form1";
             this.Text = "Form1";
+            this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgUserData)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericOrganizations)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericYears)).EndInit();
@@ -206,9 +208,9 @@
         private System.Windows.Forms.NumericUpDown numericOrganizations;
         private System.Windows.Forms.NumericUpDown numericYears;
         private System.Windows.Forms.NumericUpDown numericColumns;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnX;
         private System.Windows.Forms.Button btnStart;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnX;
     }
 }
 
